@@ -1,0 +1,698 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Ramas, merge y conflictos</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(50, 48, 44, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-default_background {
+	color: rgba(50, 48, 44, 1);
+}
+.highlight-gray_background {
+	background: rgba(248, 248, 247, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(248, 243, 252, 1);
+}
+.highlight-pink_background {
+	background: rgba(252, 241, 246, 1);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(248, 248, 247, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(248, 243, 252, 1);
+}
+.block-color-pink_background {
+	background: rgba(252, 241, 246, 1);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: undefined; }
+.select-value-color-pink { background-color: rgba(225, 136, 179, 0.27); }
+.select-value-color-purple { background-color: rgba(168, 129, 197, 0.27); }
+.select-value-color-green { background-color: rgba(123, 183, 129, 0.27); }
+.select-value-color-gray { background-color: rgba(84, 72, 49, 0.15); }
+.select-value-color-transparentGray { background-color: undefined; }
+.select-value-color-translucentGray { background-color: undefined; }
+.select-value-color-orange { background-color: rgba(224, 124, 57, 0.27); }
+.select-value-color-brown { background-color: rgba(210, 162, 141, 0.35); }
+.select-value-color-red { background-color: rgba(244, 171, 159, 0.4); }
+.select-value-color-yellow { background-color: rgba(236, 191, 66, 0.39); }
+.select-value-color-blue { background-color: rgba(93, 165, 206, 0.27); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="1e74130a-94c9-801e-8a85-ff540a697542" class="page sans"><header><h1 class="page-title">Ramas, merge y conflictos</h1><p class="page-description"></p><table class="properties"><tbody><tr class="property-row property-row-status"><th><span class="icon property-icon"><svg aria-hidden="true" role="graphics-symbol" viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(71, 70, 68, 0.6);flex-shrink:0" class="typesStatus"><path d="M8.75488 1.02344C8.75488 0.613281 8.41309 0.264648 8.00293 0.264648C7.59277 0.264648 7.25098 0.613281 7.25098 1.02344V3.11523C7.25098 3.51855 7.59277 3.86719 8.00293 3.86719C8.41309 3.86719 8.75488 3.51855 8.75488 3.11523V1.02344ZM3.91504 5.0293C4.20215 5.31641 4.69434 5.32324 4.97461 5.03613C5.26855 4.74902 5.26855 4.25684 4.98145 3.96973L3.53906 2.52051C3.25195 2.2334 2.7666 2.21973 2.47949 2.50684C2.19238 2.79395 2.18555 3.28613 2.47266 3.57324L3.91504 5.0293ZM10.9629 4.01758C10.6826 4.30469 10.6826 4.79688 10.9697 5.08398C11.2568 5.37109 11.749 5.36426 12.0361 5.07715L13.4854 3.62793C13.7725 3.34082 13.7725 2.84863 13.4785 2.55469C13.1982 2.27441 12.7061 2.27441 12.4189 2.56152L10.9629 4.01758ZM15.0234 8.78906C15.4336 8.78906 15.7822 8.44727 15.7822 8.03711C15.7822 7.62695 15.4336 7.28516 15.0234 7.28516H12.9385C12.5283 7.28516 12.1797 7.62695 12.1797 8.03711C12.1797 8.44727 12.5283 8.78906 12.9385 8.78906H15.0234ZM0.975586 7.28516C0.56543 7.28516 0.223633 7.62695 0.223633 8.03711C0.223633 8.44727 0.56543 8.78906 0.975586 8.78906H3.07422C3.48438 8.78906 3.83301 8.44727 3.83301 8.03711C3.83301 7.62695 3.48438 7.28516 3.07422 7.28516H0.975586ZM12.0361 10.9902C11.749 10.71 11.2568 10.71 10.9629 10.9971C10.6826 11.2842 10.6826 11.7764 10.9697 12.0635L12.4258 13.5127C12.7129 13.7998 13.2051 13.793 13.4922 13.5059C13.7793 13.2256 13.7725 12.7266 13.4854 12.4395L12.0361 10.9902ZM2.52051 12.4395C2.22656 12.7266 2.22656 13.2188 2.50684 13.5059C2.79395 13.793 3.28613 13.7998 3.57324 13.5127L5.02246 12.0703C5.31641 11.7832 5.31641 11.291 5.03613 11.0039C4.74902 10.7168 4.25684 10.71 3.96973 10.9971L2.52051 12.4395ZM8.75488 12.9658C8.75488 12.5557 8.41309 12.207 8.00293 12.207C7.59277 12.207 7.25098 12.5557 7.25098 12.9658V15.0576C7.25098 15.4609 7.59277 15.8096 8.00293 15.8096C8.41309 15.8096 8.75488 15.4609 8.75488 15.0576V12.9658Z"></path></svg></span>Estado</th><td><span class="status-value select-value-color-blue"><div class="status-dot status-dot-color-blue"></div>En curso</span></td></tr><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><svg aria-hidden="true" role="graphics-symbol" viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(71, 70, 68, 0.6);flex-shrink:0" class="typesMultipleSelect"><path d="M1.91602 4.83789C2.44238 4.83789 2.87305 4.40723 2.87305 3.87402C2.87305 3.34766 2.44238 2.91699 1.91602 2.91699C1.38281 2.91699 0.952148 3.34766 0.952148 3.87402C0.952148 4.40723 1.38281 4.83789 1.91602 4.83789ZM5.1084 4.52344H14.3984C14.7607 4.52344 15.0479 4.23633 15.0479 3.87402C15.0479 3.51172 14.7607 3.22461 14.3984 3.22461H5.1084C4.74609 3.22461 4.45898 3.51172 4.45898 3.87402C4.45898 4.23633 4.74609 4.52344 5.1084 4.52344ZM1.91602 9.03516C2.44238 9.03516 2.87305 8.60449 2.87305 8.07129C2.87305 7.54492 2.44238 7.11426 1.91602 7.11426C1.38281 7.11426 0.952148 7.54492 0.952148 8.07129C0.952148 8.60449 1.38281 9.03516 1.91602 9.03516ZM5.1084 8.7207H14.3984C14.7607 8.7207 15.0479 8.43359 15.0479 8.07129C15.0479 7.70898 14.7607 7.42188 14.3984 7.42188H5.1084C4.74609 7.42188 4.45898 7.70898 4.45898 8.07129C4.45898 8.43359 4.74609 8.7207 5.1084 8.7207ZM1.91602 13.2324C2.44238 13.2324 2.87305 12.8018 2.87305 12.2686C2.87305 11.7422 2.44238 11.3115 1.91602 11.3115C1.38281 11.3115 0.952148 11.7422 0.952148 12.2686C0.952148 12.8018 1.38281 13.2324 1.91602 13.2324ZM5.1084 12.918H14.3984C14.7607 12.918 15.0479 12.6309 15.0479 12.2686C15.0479 11.9062 14.7607 11.6191 14.3984 11.6191H5.1084C4.74609 11.6191 4.45898 11.9062 4.45898 12.2686C4.45898 12.6309 4.74609 12.918 5.1084 12.918Z"></path></svg></span>Etiquetas</th><td></td></tr></tbody></table></header><div class="page-body"><ul id="1e74130a-94c9-8050-bf06-cd6d3214603f" class="toggle"><li><details open=""><summary><mark class="highlight-red"><strong>Rama</strong></mark></summary><ul id="1e74130a-94c9-8087-ab6f-c0bc8506ec65" class="bulleted-list"><li style="list-style-type:disc">Línea de desarrollo independiente<ul id="1e74130a-94c9-8024-a8b5-c8730bc8d8cb" class="bulleted-list"><li style="list-style-type:circle">Se puede trabajar funcionalidades, arreglar errores SIN afectar al código principal (la rama main o master)</li></ul><ul id="1e74130a-94c9-80c5-b263-f8d85dd1cd1d" class="bulleted-list"><li style="list-style-type:circle">Para trabajar libremente sin romper el código principal</li></ul><ul id="1e74130a-94c9-80dd-a42f-f0d84e798730" class="bulleted-list"><li style="list-style-type:circle">Después se puede fusionar esta a la main (merge)</li></ul></li></ul><ul id="1e74130a-94c9-80f5-acfc-db3be6450859" class="toggle"><li><details open=""><summary><mark class="highlight-red">Crear Ramas</mark></summary><ul id="1e74130a-94c9-8005-a11d-eea56af7e0cf" class="toggle"><li><details open=""><summary><mark class="highlight-blue"><strong>Diferencia entre checkout y switch </strong></mark></summary><ul id="1e74130a-94c9-80a1-9e26-f56535761a03" class="toggle"><li><details open=""><summary><mark class="highlight-blue">checkout</mark></summary><ul id="1e74130a-94c9-8020-9323-c51baab262a2" class="bulleted-list"><li style="list-style-type:disc">Es antiguo y más complejo, hace más cosas, como ser:<ul id="1e74130a-94c9-80a1-bd2d-c8eb68a34ba5" class="bulleted-list"><li style="list-style-type:circle">Crear y cambiar rama<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1ed4130a-94c9-8055-897d-e62ba1151150" class="code"><code class="language-Bash">git checkout -b nueva-rama
+
+# &quot;-b&quot; es abreviación de branch. Este indica que cree una nueva rama</code></pre></li></ul><ul id="1e74130a-94c9-809f-b98a-c222ec37abf2" class="bulleted-list"><li style="list-style-type:circle">Cambiar de rama <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1ed4130a-94c9-80bb-9155-f90c1b95ae79" class="code"><code class="language-Bash">git checkout nombre-de-la-rama</code></pre></li></ul><ul id="1e74130a-94c9-8020-9450-c902985e0749" class="bulleted-list"><li style="list-style-type:circle">Restaurar archivos específicos<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1ed4130a-94c9-80ba-b30d-fa2d6115fe4f" class="code"><code class="language-Bash">git checkout HEAD archivo.txt</code></pre></li></ul><ul id="1e74130a-94c9-806e-8505-fec7f6a06617" class="bulleted-list"><li style="list-style-type:circle">Ir a commits específicos <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1ed4130a-94c9-8024-892a-c15eb6cf140e" class="code"><code class="language-Bash">git checkout abc1234
+
+# Sin estar en alguna rama </code></pre></li></ul></li></ul></details></li></ul><ul id="1e74130a-94c9-802a-af9e-f9705840604f" class="toggle"><li><details open=""><summary><mark class="highlight-blue">switch</mark></summary><ul id="1e74130a-94c9-8014-aeb6-f5af49c95d01" class="bulleted-list"><li style="list-style-type:disc">Es más moderno y está para simplificar el trabajo con ramas</li></ul><ul id="1e74130a-94c9-80ff-b9ae-e02b4d0aab5a" class="bulleted-list"><li style="list-style-type:disc">Este puede:<ul id="1e74130a-94c9-800c-b8b5-e1562b311cf9" class="bulleted-list"><li style="list-style-type:circle">Cambiar de rama</li></ul><ul id="1e74130a-94c9-80dd-ac30-efc56da7c72f" class="bulleted-list"><li style="list-style-type:circle">Crear rama </li></ul></li></ul><ul id="1e74130a-94c9-805a-90f5-c6074a14231b" class="bulleted-list"><li style="list-style-type:disc">No puede:<ul id="1ed4130a-94c9-8065-bc82-d96cf45e5041" class="bulleted-list"><li style="list-style-type:circle">Restaurar archivos (para eso checkout o restore)</li></ul><ul id="1ed4130a-94c9-801a-af17-c25fee9acc1b" class="bulleted-list"><li style="list-style-type:circle">Ir a commits específicos (para eso solo checkout)</li></ul><ul id="1ed4130a-94c9-80fb-8972-d44ee6b6ddd7" class="bulleted-list"><li style="list-style-type:circle">Restaurar archivos desde un commit (para eso checkout o restore -- source)</li></ul><ul id="1ed4130a-94c9-80e5-a043-cf22d2f2667f" class="bulleted-list"><li style="list-style-type:circle">Descartar cambios en archivos (para eso checkout o restore)</li></ul></li></ul></details></li></ul><table id="1e74130a-94c9-8031-a828-d36c75d7b009" class="simple-table"><tbody><tr id="1e74130a-94c9-8032-8f7e-e00e0b5a2bd4"><td id="N{}g" class="">Acción</td><td id="Zcam" class=""><code>checkout</code></td><td id="ge\]" class=""><code>switch</code></td></tr><tr id="1e74130a-94c9-805d-902b-ff8ff838a330"><td id="N{}g" class="">Cambiar de rama</td><td id="Zcam" class="">✅</td><td id="ge\]" class="">✅</td></tr><tr id="1e74130a-94c9-8011-abfe-c2a45da481cd"><td id="N{}g" class="">Crear y cambiar a nueva rama</td><td id="Zcam" class="">✅</td><td id="ge\]" class="">✅ (<code>-c</code>)</td></tr><tr id="1e74130a-94c9-8029-ab7f-df6d80a2925b"><td id="N{}g" class="">Restaurar archivos individuales</td><td id="Zcam" class="">✅</td><td id="ge\]" class="">❌</td></tr><tr id="1e74130a-94c9-8079-bee8-d6cdaa9c3f9f"><td id="N{}g" class="">Ir a un commit específico (detached HEAD)</td><td id="Zcam" class="">✅</td><td id="ge\]" class="">❌ (por diseño)</td></tr></tbody></table></details></li></ul><ul id="1e74130a-94c9-80f1-bb3b-e11d29d614f7" class="toggle"><li><details open=""><summary><mark class="highlight-blue"><strong>Crear Rama (con checkout)</strong></mark></summary><ul id="1e74130a-94c9-804d-838e-ebedb3c98303" class="bulleted-list"><li style="list-style-type:disc">Para agregar una nueva funcionalidad: <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1e74130a-94c9-8084-a2cb-d0b17f5ece9f" class="code"><code class="language-Bash">git branch nueva-funcionalidad  #crea la rama pero no cambia a ella 
+git checkout nueva-funcionalidad  #cambia a la rama ya creada
+
+git checkout -b nueva-rama  #crea y cambia a la rama </code></pre><p id="1e74130a-94c9-8084-b8cd-dc0fa5647497" class="">El “checkout” es el que actualiza al puntero HEAD diciendo “ahora ponme aquí para trabajar” para que los siguientes commits se guarden en esa rama y ya no en la main</p></li></ul></details></li></ul><ul id="1e74130a-94c9-80ad-a94d-f06137ff7f49" class="toggle"><li><details open=""><summary><mark class="highlight-blue"><strong>Crear Rama (con switch)</strong></mark></summary><ul id="1e74130a-94c9-803f-bb5e-dd1959f5ad34" class="bulleted-list"><li style="list-style-type:disc">Para crear la rama:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1e74130a-94c9-80d0-a190-d984e2bee223" class="code"><code class="language-Bash">git branch mi-primera-rama # o para crear y dirigirse a la rama
+git switch -c mi-primera-rama # te avisa si ya existe la rama (-c = create)</code></pre></li></ul><ul id="1e74130a-94c9-803a-bc98-cc6ec9cb4e38" class="bulleted-list"><li style="list-style-type:disc">Para cambiar a otra rama:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1e74130a-94c9-8050-9e5a-e8427f11f3e5" class="code"><code class="language-Bash">git switch mi-primera-rama</code></pre></li></ul></details></li></ul></details></li></ul><ul id="1ed4130a-94c9-80b7-8062-fccb243f0906" class="toggle"><li><details open=""><summary><mark class="highlight-red">Fusionar Ramas</mark></summary><ul id="1ed4130a-94c9-809f-bea8-fe2469a7cbe9" class="bulleted-list"><li style="list-style-type:disc">Las bifurcaciones tienen dos destinos<ul id="1ed4130a-94c9-80d9-b975-f38de03c193f" class="bulleted-list"><li style="list-style-type:circle">Quedar en el olvido </li></ul><ul id="1ed4130a-94c9-80fa-ba49-eebff863b880" class="bulleted-list"><li style="list-style-type:circle">Ser fusionados a otra rama</li></ul></li></ul><ul id="1e74130a-94c9-8014-b71c-d8000c98a4b0" class="bulleted-list"><li style="list-style-type:disc">Para fusionar lo hecho a otra rama<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1e74130a-94c9-8037-a5a9-d130eaf95881" class="code"><code class="language-Bash">git checkout main  # cambia a la rama main
+git merge nueva-funcionalidad # fuciona la rama a la rama main</code></pre><p id="1e74130a-94c9-80b7-8d05-f2927ea54191" class="">“merge” es quien fusiona la rama en la que estamos actualmente con la que le indicamos (debemos estar en la rama donde queremos recibir los cambios)</p></li></ul><ul id="1ed4130a-94c9-80ec-9506-cce2ba6b9ad9" class="toggle"><li><details open=""><summary><mark class="highlight-blue"><strong>“git merge --edit” y “git merge -- no-commit”</strong></mark></summary><ul id="1ed4130a-94c9-80f6-89c6-faf48ab474d0" class="toggle"><li><details open=""><summary><mark class="highlight-blue">git merge --edit</mark></summary><ul id="1ed4130a-94c9-80ab-bbe9-fbe8db86466b" class="bulleted-list"><li style="list-style-type:disc">Este comando nos permite modificar el mensaje del merge por uno que querramos nosotros<ul id="1ed4130a-94c9-806a-bfef-cb867909d92a" class="bulleted-list"><li style="list-style-type:circle">Para describir el merge (un mejor historial)</li></ul></li></ul></details></li></ul><ul id="1ed4130a-94c9-8066-a86a-e6f3af4ed58b" class="toggle"><li><details open=""><summary><mark class="highlight-blue">git merge -- no-commit</mark></summary><ul id="1ed4130a-94c9-809c-bcf8-cf333be688f3" class="bulleted-list"><li style="list-style-type:disc">Indica a merge que NO haga el commit automáticamente<ul id="1ed4130a-94c9-80f2-a9d4-d41c15acf1c3" class="bulleted-list"><li style="list-style-type:circle">Para revisar los archivos fusionados, hacer cambios, agregar, etc. y hacer nosotros manualmente el commit cuando creamos que está listo </li></ul><ul id="1ed4130a-94c9-8022-b6ab-d1a06c499a6c" class="bulleted-list"><li style="list-style-type:circle">Modificar (si es necesario) el resultado del merge</li></ul><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="1ed4130a-94c9-808f-a278-fc433470e23d"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><p id="1ed4130a-94c9-803e-af2a-f2d3894768d2" class="">No suele ser muy necesario, solo cuando se requiere de mayor control</p></div></figure></li></ul></details></li></ul></details></li></ul></details></li></ul><ul id="1ed4130a-94c9-8039-906f-d6eea8e905cf" class="toggle"><li><details open=""><summary><mark class="highlight-red">Eliminar Ramas</mark></summary><ul id="1ed4130a-94c9-8065-bb23-c17db477488d" class="bulleted-list"><li style="list-style-type:disc">Es buena práctica borrar ramas para:<ul id="1ed4130a-94c9-8021-a4dc-ceca15b03752" class="bulleted-list"><li style="list-style-type:circle">Mantener el repositorio limpio y en orden<ul id="1ed4130a-94c9-80c1-9cd2-f51069d0df8a" class="bulleted-list"><li style="list-style-type:square">Para que no se llene de ramas que no se usen</li></ul><ul id="1ed4130a-94c9-8053-b62a-e507c4fa05a3" class="bulleted-list"><li style="list-style-type:square">Evitar el ruido o confusiones con los colaboradores</li></ul></li></ul><ul id="1ed4130a-94c9-800f-9da8-f10a90cf9aa4" class="bulleted-list"><li style="list-style-type:circle">Evitar errores<ul id="1ed4130a-94c9-8008-bbe6-ce8e6798551d" class="bulleted-list"><li style="list-style-type:square">Para que no se trabaje con una rama que ya no es útil por confusión o accidente </li></ul></li></ul><ul id="1ed4130a-94c9-804d-aa95-cd88e5e7917e" class="bulleted-list"><li style="list-style-type:circle">Indicar que la “tarea” ya está terminada<ul id="1ed4130a-94c9-8073-aa65-d15a8ce2a48d" class="bulleted-list"><li style="list-style-type:square">Esto hace alusión a un control de actividades </li></ul></li></ul><ul id="1ed4130a-94c9-808e-87af-d5a786244a76" class="bulleted-list"><li style="list-style-type:circle">Mejorar el rendimiento del repositorio</li></ul></li></ul><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="1ed4130a-94c9-80af-a808-c97e0c3f658a"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><p id="1ed4130a-94c9-80b6-bb0f-cfc4b4b03a3d" class="">Al momento de fusionar una rama a otra, la que ya no queremos queda igual que antes de fusionarla, sin embargo, como su trabajo ya fue integrado, ya no tiene propósito</p></div></figure><ul id="1ed4130a-94c9-806d-ad40-c51fd3ab1d84" class="toggle"><li><details open=""><summary><mark class="highlight-blue"><strong>Cómo borrar una rama</strong></mark></summary><ul id="1ed4130a-94c9-8085-a2d6-e98e95af459f" class="bulleted-list"><li style="list-style-type:disc">Para borrar una rama se añade el parámetro “delete” o “d”<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1ed4130a-94c9-8061-a256-c547844dc1a8" class="code"><code class="language-Bash">git branch --d rama-prueba</code></pre><p id="1ed4130a-94c9-80b3-a2ea-d494e728cb1f" class="">Este comando sólo funciona correctamente si la rama fue previamente fusionada</p></li></ul><ul id="1ed4130a-94c9-80bb-801e-de42aa6230b0" class="bulleted-list"><li style="list-style-type:disc">Para borrar una rama NO fusionada, usamos el parámetro “D” que indica que estamos seguros de borrar esta rama<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1ed4130a-94c9-803c-be95-e8000939b24c" class="code"><code class="language-Bash">git branch --D rama-prueba2</code></pre></li></ul></details></li></ul></details></li></ul><ul id="1ed4130a-94c9-803f-aa3f-f6d1065393c8" class="toggle"><li><details open=""><summary><mark class="highlight-red">Más comandos para ramas</mark></summary><ul id="1ed4130a-94c9-80c3-a2af-e6bb4c6418ee" class="toggle"><li><details open=""><summary><mark class="highlight-blue"><strong>git branch</strong></mark></summary><ul id="1ed4130a-94c9-804a-91c0-f1b7b59c0f15" class="bulleted-list"><li style="list-style-type:disc">Muestra una lista de todas las ramas locales del repositorio</li></ul><ul id="1ed4130a-94c9-80ba-ad2c-d972e78ec121" class="bulleted-list"><li style="list-style-type:disc">Resultado:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1ed4130a-94c9-8034-af55-d3dac303efaf" class="code"><code class="language-Bash">  main
+* nueva-funcionalidad</code></pre><p id="1ed4130a-94c9-80ae-af80-f323130e17e6" class="">El asterisco indica en qué rama estás</p></li></ul></details></li></ul><ul id="1ed4130a-94c9-8075-83fc-d0efe90bc8a2" class="toggle"><li><details open=""><summary><mark class="highlight-blue"><strong>git branch -a </strong></mark></summary><ul id="1ed4130a-94c9-8015-abbb-c5e35e7362ca" class="bulleted-list"><li style="list-style-type:disc">Muestra todas las ramas, tanto locales como remotas</li></ul><ul id="1ed4130a-94c9-8035-bf3a-d356747c6683" class="bulleted-list"><li style="list-style-type:disc">Resultado:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1ed4130a-94c9-8082-ad13-c0d3e403dc19" class="code"><code class="language-Bash">  main
+  mi-rama
+  remotes/origin/main
+  remotes/origin/otra-rama</code></pre></li></ul></details></li></ul><ul id="1ed4130a-94c9-8042-8bc5-d6d270799154" class="toggle"><li><details open=""><summary><mark class="highlight-blue"><strong>git rebase</strong></mark></summary><ul id="1ed4130a-94c9-80d9-a6ff-ce316109d86d" class="bulleted-list"><li style="list-style-type:disc">Reescribe el historial de una rama<ul id="1ed4130a-94c9-80ce-92b0-d27135bd4ffb" class="bulleted-list"><li style="list-style-type:circle">Mueve los commits de una rama replicándolos sobre otra como si estos hubieran sido creados en esa otra rama originalmente</li></ul></li></ul><ul id="1ed4130a-94c9-800a-ba0b-ed46067be442" class="bulleted-list"><li style="list-style-type:disc">Sirve para:<ul id="1ed4130a-94c9-802a-98e1-e18d156294cc" class="bulleted-list"><li style="list-style-type:circle">Tener un historial más limpio (sin tantos commits de merge)</li></ul><ul id="1ed4130a-94c9-80b3-8fbe-e7314e38c441" class="bulleted-list"><li style="list-style-type:circle">Integrar cambios a otra rama antes de fusionar</li></ul><ul id="1ed4130a-94c9-80f1-8298-f2797cf69c5f" class="bulleted-list"><li style="list-style-type:circle">Para reorganizar commits</li></ul></li></ul><ul id="1ed4130a-94c9-8005-ac98-d18bb37d2e89" class="toggle"><li><details open=""><summary><mark class="highlight-blue">Diferencia con git merge</mark></summary><ul id="1ed4130a-94c9-8078-8f24-c9c2da2675a3" class="bulleted-list"><li style="list-style-type:disc">Mientras merge mantiene un historial con bifurcaciones y commits de la fusión, rebase es un historial limpio sin commits de merge </li></ul></details></li></ul></details></li></ul></details></li></ul></details></li></ul><ul id="1ed4130a-94c9-805f-abfe-ef0b763bf9ae" class="toggle"><li><details open=""><summary><mark class="highlight-red"><strong>Conflictos </strong></mark></summary><ul id="1ed4130a-94c9-80f1-a0f9-e4aa74db99d4" class="bulleted-list"><li style="list-style-type:disc">Cuando sucede un conflicto, al arreglarlo manualmente tenemos 3 alternativas<ul id="1ed4130a-94c9-8068-aa43-f169504259cf" class="bulleted-list"><li style="list-style-type:circle">Nos quedamos con los cambios de rama 1</li></ul><ul id="1ed4130a-94c9-80c8-b25a-cd2ac283de6d" class="bulleted-list"><li style="list-style-type:circle">Nos quedamos con los cambios de rama 2 </li></ul><ul id="1ed4130a-94c9-80a2-aaee-f007e850dd38" class="bulleted-list"><li style="list-style-type:circle">Modificamos los cambios para hacer una mezcla personalizada (fusionamos)<ul id="1ed4130a-94c9-80de-b698-c677fc2b4f82" class="bulleted-list"><li style="list-style-type:square">El mensaje nos mostrará primero el contenido que ya existía y después el que queremos incorporar</li></ul></li></ul></li></ul><ol type="1" id="1ed4130a-94c9-8060-a862-fc9048a360f6" class="numbered-list" start="1"><li><mark class="highlight-red">Conflictos al fusionar (git merge)</mark><ul id="1ed4130a-94c9-809b-a808-f93534d3d466" class="bulleted-list"><li style="list-style-type:disc">Cuando 2 ramas han editado las mismas líneas de un archivo </li></ul><ul id="1ed4130a-94c9-8017-8544-c1e7bd16dd45" class="bulleted-list"><li style="list-style-type:disc">Solución:<ul id="1ed4130a-94c9-80d4-86a9-c3ec20abb5ae" class="bulleted-list"><li style="list-style-type:circle">git nos marca para escoger con cuál nos quedamos o si mezclamos ambas</li></ul></li></ul><ul id="1ed4130a-94c9-802e-add1-c17105a959da" class="bulleted-list"><li style="list-style-type:disc">Para evitarlo:<ul id="1ed4130a-94c9-8096-9f27-ecb3baeaa978" class="bulleted-list"><li style="list-style-type:circle">Actualizar nuestra rama frecuentemente, incluso antes de trabajar (para tener todos los últimos cambios)</li></ul><ul id="1ed4130a-94c9-806a-9057-d2704a4f4813" class="bulleted-list"><li style="list-style-type:circle">Si estamos en otra rama, traer regularmente los cambios que ya hay en la rama main</li></ul><ul id="1ed4130a-94c9-80ae-a572-c49588ba8b82" class="bulleted-list"><li style="list-style-type:circle">Trabajar en ramas con objetivos específicos y pequeños</li></ul><ul id="1ed4130a-94c9-801a-8559-d771652c6584" class="bulleted-list"><li style="list-style-type:circle">Coordinar qué líneas va a trabajarlo quién</li></ul></li></ul></li></ol><ol type="1" id="1ed4130a-94c9-80f6-adb7-e64c47a615f3" class="numbered-list" start="2"><li><mark class="highlight-red">Conflictos al rebase (git rebase)</mark><ul id="1ed4130a-94c9-808c-9361-ccd8214d4cef" class="bulleted-list"><li style="list-style-type:disc">Al reescribir el historial de una rama compartida, podemos estar tratando de reescribir el historial de otro y eso genera un conflicto (y puede que el historial que queremos reescribir ya haya cambiado, sea porque ya no existe el archivo o este fue modificado)</li></ul><ul id="1ed4130a-94c9-80b4-9e15-fe320a975a86" class="bulleted-list"><li style="list-style-type:disc">Solución:<ul id="1ed4130a-94c9-80d5-a8ff-fed93f14ba5b" class="bulleted-list"><li style="list-style-type:circle">git nos dice cuál escogemos o si mezclamos ambos</li></ul></li></ul><ul id="1ed4130a-94c9-805d-9870-fcba5621a268" class="bulleted-list"><li style="list-style-type:disc">Para evitarlo:<ul id="1ed4130a-94c9-8032-8f64-c5dc588c0594" class="bulleted-list"><li style="list-style-type:circle">Hacer pull con el parámetro rebase regularmente</li></ul><ul id="1ed4130a-94c9-8038-9051-d755cc3c6b2b" class="bulleted-list"><li style="list-style-type:circle">De preferencia no hacer rebase en ramas compartidas </li></ul><ul id="1ed4130a-94c9-8050-bca1-da0f7a74ccb8" class="bulleted-list"><li style="list-style-type:circle">Usar rebase -i (interactivo) para revisar los cambios que se aplicarán </li></ul></li></ul></li></ol><ol type="1" id="1ed4130a-94c9-80b5-922d-d69b90abb567" class="numbered-list" start="3"><li><mark class="highlight-red">Conflictos al hacer pull</mark><ul id="1ed4130a-94c9-8000-9ff7-d198e7468846" class="bulleted-list"><li style="list-style-type:disc">Cuando estamos en la rama local y hacemos pull sin hacer antes push, git intentará fusionar lo remoto con lo local y habrá un conflicto</li></ul><ul id="1ed4130a-94c9-807f-bb95-e0a9b0235702" class="bulleted-list"><li style="list-style-type:disc">Solución:<ul id="1ed4130a-94c9-8027-b142-fb7c518f55de" class="bulleted-list"><li style="list-style-type:circle">Lo mismo que con merge</li></ul></li></ul><ul id="1ed4130a-94c9-8049-84e4-d0b8420993f0" class="bulleted-list"><li style="list-style-type:disc">Para evitar:<ul id="1ed4130a-94c9-80cf-94b7-feda23d56c0b" class="bulleted-list"><li style="list-style-type:circle">Los mismo que con merge</li></ul></li></ul></li></ol><ol type="1" id="1ed4130a-94c9-80d6-8076-fa2c3e47e2fb" class="numbered-list" start="4"><li><mark class="highlight-red">Conflictos al cambiar de rama</mark><ul id="1ed4130a-94c9-80fe-9623-cb76fc2d30c7" class="bulleted-list"><li style="list-style-type:disc">Pasa cuando hay cambios no confirmados en los archivos y cambiamos de rama </li></ul><ul id="1ed4130a-94c9-80da-a9a6-fbac55bf9ed9" class="bulleted-list"><li style="list-style-type:disc">Solución:<ul id="1ed4130a-94c9-80b0-a72e-efda8304d6b0" class="bulleted-list"><li style="list-style-type:circle">Hacer un commit antes de cambiar de rama </li></ul></li></ul><ul id="1ed4130a-94c9-8007-af57-c0d55905f6b3" class="bulleted-list"><li style="list-style-type:disc">Para evitar:<ul id="1ed4130a-94c9-80a9-990e-f3025abcc905" class="bulleted-list"><li style="list-style-type:circle">Hacer un commit antes de cambiar de rama o un stash</li></ul></li></ul></li></ol><ol type="1" id="1ed4130a-94c9-803f-a423-ffc0ba140b7b" class="numbered-list" start="5"><li><mark class="highlight-red">Conflictos al aplicar un stash</mark><ul id="1ed4130a-94c9-80c3-9e8a-c753f244dc11" class="bulleted-list"><li style="list-style-type:disc">Al hacer git stash, se guardan los cambios no confirmados en una “caja temporal” llamada stash<p id="1ed4130a-94c9-807f-b2ca-dd7ee042bef2" class="">Esos cambios se aplican con:<div class="indented"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1ed4130a-94c9-8067-8035-d07cb0c0c2a8" class="code"><code class="language-Bash">git stash pop </code></pre><p id="1ed4130a-94c9-80c9-bce5-f4777e54390d" class="">Al igual que con merge y otros conflictos que ya vimos, si se hacen cambios en lo que ya tenía cambios guardados en un stash (hacemos cambios olvidando que hay cambios en la caja pendientes por aplicar con pop) git no sabe cuál mantener, si los de la caja o los que hicimos actualmente</p></div></p></li></ul><ul id="1ed4130a-94c9-8056-a7c7-c0c28a62a831" class="bulleted-list"><li style="list-style-type:disc">Solución:<ul id="1ed4130a-94c9-80fc-861a-e9987a99788a" class="bulleted-list"><li style="list-style-type:circle">Elegir uno o fusionarlos y finalizar el stash con un commit </li></ul><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="1ed4130a-94c9-80ce-8866-e88dc81db7ed"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><p id="1ed4130a-94c9-80b8-83ae-f3280f8c1ad2" class=""><code>stash pop</code> automáticamente elimina el stash <em>si no hay conflicto</em>. Si <strong>hay conflicto</strong>, <strong>no se elimina</strong>, así que puedes recuperarlo con <code>git stash list</code>.</p></div></figure></li></ul><ul id="1ed4130a-94c9-80b0-a92a-d0488ee27c48" class="bulleted-list"><li style="list-style-type:disc">Para evitarlo:<ul id="1ed4130a-94c9-8061-8c13-c499bd47fd0a" class="bulleted-list"><li style="list-style-type:circle">Revisar lo que hay en el stash con:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1ed4130a-94c9-8088-998e-d1ac5d71c69a" class="code"><code class="language-Bash">git stash show -p</code></pre></li></ul><ul id="1ed4130a-94c9-80b4-beeb-f01507cc060f" class="bulleted-list"><li style="list-style-type:circle">Hacer stash pop antes de hacer nuevos cambios</li></ul><ul id="1ed4130a-94c9-809f-9036-cf0e47f0b48f" class="bulleted-list"><li style="list-style-type:circle">Si ya hay cambios confirmados, hacer commit de estos y después hacer un stash si es necesario </li></ul><ul id="1ed4130a-94c9-80ac-b348-d97b78fd55e8" class="bulleted-list"><li style="list-style-type:circle">Usar stash apply en vez de pop, tal que este aplica los cambios pero sin borrar lo que está en el stash <ul id="1ed4130a-94c9-80b4-8980-dff0c5b61b6e" class="bulleted-list"><li style="list-style-type:square">Para limpiar el stash si ya no se necesita su contenido:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1ed4130a-94c9-806f-92c8-c5fb197a405a" class="code"><code class="language-Bash">git stash drop stash@{0} # de uno específico
+git stash clear # todos los stashes </code></pre></li></ul></li></ul></li></ul></li></ol></details></li></ul></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
