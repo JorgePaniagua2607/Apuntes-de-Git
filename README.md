@@ -177,3 +177,172 @@ git stash clear
 - Hacer `stash` o `commit` antes de cambiar de rama.
 - Evitar `rebase` en ramas compartidas si no se domina.
 
+----------------------------------------------------------------------------------------------------------
+
+# Git y GitHub
+
+## Diferencia entre Git y GitHub
+
+**Git** es un sistema de control de versiones distribuido, mientras que **GitHub** es un servicio en la nube para almacenar y manejar repositorios Git de forma remota.
+
+### Alternativas a GitHub
+
+- **Bitbucket**: Integración con herramientas de desarrollo como Jira y Trello.
+- **GitLab**: Plataforma DevOps todo en uno, que incluye CI/CD, repositorios, etc.
+
+## Repositorios remotos
+
+Los repositorios remotos son aquellos almacenados en un servidor y sirven como punto de sincronización entre repositorios locales.
+
+## Enlazar repositorio local con uno remoto
+
+1. Crea un repositorio en GitHub.
+2. Copia la URL SSH del repositorio.
+3. En la terminal, enlaza el repositorio local con el remoto:
+
+```bash
+git remote add origin <URL-SSH>
+```
+
+> Un repositorio local puede estar enlazado a varios repositorios remotos.
+
+## Generar llave SSH
+
+Verifica si ya existen llaves:
+
+```bash
+ls ~/.ssh
+```
+
+Genera una nueva llave SSH:
+
+- **RSA** (compatible con todo):
+
+```bash
+ssh-keygen -t rsa -b 4096 -C "correo@ejemplo.com"
+```
+
+- **ED25519** (más rápida y moderna):
+
+```bash
+ssh-keygen -t ed25519 -C "correo@ejemplo.com"
+```
+
+Copia la clave pública:
+
+```bash
+cat ~/.ssh/id_rsa.pub
+```
+
+Agrega la llave pública en GitHub: [https://github.com/settings/keys](https://github.com/settings/keys)
+
+Prueba la conexión:
+
+```bash
+ssh -T git@github.com
+```
+
+## Subir cambios a repositorio remoto
+
+Para subir los cambios al repositorio remoto, usa:
+
+```bash
+git push origin main
+```
+
+O si es la primera vez que subes la rama:
+
+```bash
+git push -u origin main
+```
+
+## Crear y subir rama remota
+
+1. Crea una nueva rama local:
+
+```bash
+git checkout -b nombre-rama
+```
+
+2. Sube la rama al repositorio remoto:
+
+```bash
+git push origin nombre-rama
+```
+
+## Clonar repositorio remoto
+
+1. Copia la URL SSH desde GitHub.
+2. Clona el repositorio con el siguiente comando:
+
+```bash
+git clone <URL-SSH>
+```
+
+## Eliminar ramas
+
+- **Eliminar rama local**:
+
+```bash
+git branch -d nombre-rama
+```
+
+- **Eliminar rama remota**:
+
+```bash
+git push origin --delete nombre-rama
+```
+
+- **Limpiar ramas eliminadas en remoto**:
+
+```bash
+git fetch -p
+git remote prune origin
+```
+
+## Comandos con repositorios remotos
+
+- **Ver remotos configurados**:
+
+```bash
+git remote -v
+```
+
+- **Agregar remoto**:
+
+```bash
+git remote add origin <url>
+```
+
+- **Cambiar URL del remoto**:
+
+```bash
+git remote set-url origin <nueva-url>
+```
+
+## git fetch vs git pull
+
+- `git fetch`: descarga los cambios del repositorio remoto sin aplicarlos en la rama actual.
+- `git pull`: descarga y aplica los cambios del repositorio remoto en la rama actual.
+
+Comandos adicionales para fetch:
+
+```bash
+git fetch
+git fetch origin
+git fetch --prune
+git fetch --all
+```
+
+Ver diferencias entre la rama local y la remota:
+
+```bash
+git log main..origin/main
+```
+
+Aplicar los cambios:
+
+```bash
+git pull
+```
+
