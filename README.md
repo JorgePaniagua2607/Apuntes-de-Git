@@ -1,4 +1,4 @@
-# Introducción a Git
+# Compendio de los apuntes de Git 
 
 Este repositorio presenta los fundamentos del sistema de control de versiones **Git**, herramienta ampliamente utilizada en el desarrollo de software para gestionar el historial de cambios de un proyecto.
 
@@ -53,129 +53,147 @@ git init nombre-del-proyecto --initial-branch=main
 
 ----------------------------------------------------------------------------------------------------------
 
+# Estados y Commits en Git
+
 ## Estados de Git
 
-Git maneja tres estados principales para los archivos:
+- **Modified**: El archivo tiene cambios que aún no han sido marcados como confirmados. Está "untracked" cuando solo se creó el archivo y "Modified" cuando tiene cambios no preparados.
+- **Staged**: El archivo está marcado como preparado para ser confirmado. Esto sucede después de ejecutar `git add` y está listo para el commit.
+- **Committed**: El archivo se graba en el repositorio local. El archivo está "committed" cuando se guarda en el historial después de ejecutar `git commit`.
 
-- **Modified**: El archivo fue cambiado pero aún no se ha preparado para confirmación. Si es nuevo y no está siendo rastreado, se considera "untracked".
-- **Staged**: El archivo ha sido marcado para ser incluido en el próximo commit (usando `git add`).
-- **Committed**: Los cambios han sido guardados en el historial local con `git commit`.
+## Resumen visual
 
-**Resumen del flujo:**
-```bash
-WORKING DIR → git add → STAGING AREA → git commit → REPO LOCAL
-```
+1. **WORKING DIR (modificado)**: El archivo tiene cambios sin confirmar.
+2. Ejecutas `git add`.
+3. **STAGING AREA (preparado)**: El archivo está listo para el commit.
+4. Ejecutas `git commit`.
+5. **REPO LOCAL (confirmado)**: El archivo se ha guardado en el repositorio local.
+
+## Commit
+
+Un commit es un registro de los cambios realizados en los archivos del repositorio en un momento específico.
+
+### Hacer un commit
+
+1. Para guardar los cambios en el área de staging, usa:
+   ```bash
+   git commit
+   ```
+   Esto crea un commit con los cambios previamente agregados con `git add`.
+
+2. Si deseas agregar un mensaje al commit:
+   ```bash
+   git commit -m "mensaje"
+   ```
+
+3. Puedes incluir múltiples mensajes en un commit:
+   ```bash
+   git commit -m "mensaje1" -m "mensaje2"
+   ```
+
+## HEAD
+
+El **HEAD** es el puntero que indica en qué punto del historial del repositorio estás trabajando. Apunta a la rama o commit actual en el que te encuentras.
 
 ----------------------------------------------------------------------------------------------------------
 
-# Git - Ramas y Conflictos
+# Ramas, Merge y Conflictos en Git
 
-## Ramas en Git
+## Rama
+Una rama es una línea de desarrollo independiente que permite trabajar en nuevas funcionalidades o arreglos sin afectar el código principal (main o master). Las ramas se pueden fusionar (merge) una vez completadas las tareas.
 
-### ¿Qué es una rama?
-Una rama es una línea de desarrollo independiente. Permite trabajar funcionalidades o arreglos sin afectar el código principal (`main` o `master`).
+### Diferencia entre `checkout` y `switch`
 
-### Crear ramas
+- **checkout**: Es un comando más antiguo y complejo que permite crear, cambiar de rama, restaurar archivos específicos e ir a commits específicos.
+  - Crear y cambiar a nueva rama: `git checkout -b nueva-rama`
+  - Cambiar de rama: `git checkout nombre-de-la-rama`
+  - Restaurar archivos: `git checkout HEAD archivo.txt`
+  - Ir a un commit específico: `git checkout abc1234`
+  
+- **switch**: Es un comando más moderno, simplificado para trabajar con ramas. No puede restaurar archivos ni ir a commits específicos.
+  - Cambiar de rama: `git switch nombre-de-la-rama`
+  - Crear y cambiar a nueva rama: `git switch -c nueva-rama`
 
-**Con `checkout` (más antiguo y versátil):**
+### Crear Ramas
 
-```bash
-git checkout -b nueva-rama  # Crea y cambia a la nueva rama
-```
+- Con `checkout`:
+  ```bash
+  git branch nueva-funcionalidad  # crea la rama sin cambiarte a ella
+  git checkout nueva-funcionalidad  # cambia a la rama
+  ```
+  o directamente:
+  ```bash
+  git checkout -b nueva-rama  # crea y cambia a la rama
+  ```
 
-**Con `switch` (más moderno y enfocado en ramas):**
+- Con `switch`:
+  ```bash
+  git switch -c mi-primera-rama  # crea y cambia a la rama
+  ```
 
-```bash
-git switch -c nueva-rama  # Crea y cambia a la nueva rama
-```
+## Fusionar Ramas
 
-### Cambiar de rama
+Para fusionar una rama con otra:
 
-```bash
-git checkout nombre-rama
-git switch nombre-rama
-```
+1. Cambiar a la rama donde queremos fusionar los cambios:
+   ```bash
+   git checkout main  # cambia a la rama main
+   git merge nueva-funcionalidad  # fusiona la rama nueva-funcionalidad a main
+   ```
 
-### Fusionar ramas
+2. Comandos adicionales:
+   - `git merge --edit`: Permite editar el mensaje del merge.
+   - `git merge --no-commit`: Realiza la fusión sin hacer commit automáticamente, permitiendo revisar los archivos fusionados antes de confirmar.
 
-```bash
-git checkout main
-git merge nueva-rama
-```
+## Eliminar Ramas
 
-Opciones útiles:
-- `--edit`: permite editar el mensaje del merge.
-- `--no-commit`: no hace commit automático; se revisa antes de confirmar.
+Es buena práctica eliminar ramas después de fusionarlas para mantener el repositorio limpio. Para eliminar una rama:
+- Si la rama ya ha sido fusionada:
+  ```bash
+  git branch --d rama-prueba
+  ```
+- Si la rama no ha sido fusionada:
+  ```bash
+  git branch --D rama-prueba2
+  ```
 
-### Eliminar ramas
+## Más Comandos para Ramas
 
-```bash
-git branch -d rama       # Borra una rama fusionada
-git branch -D rama       # Borra una rama no fusionada (forzado)
-```
-
-### Otros comandos útiles
-
-- `git branch`: muestra ramas locales.
-- `git branch -a`: muestra ramas locales y remotas.
-- `git rebase`: reescribe el historial de una rama sobre otra (más limpio que merge).
-
-Diferencia `merge` vs `rebase`:
-- `merge` conserva el historial con bifurcaciones.
-- `rebase` crea un historial lineal, sin commits de merge.
+- `git branch`: Muestra las ramas locales del repositorio.
+- `git branch -a`: Muestra todas las ramas locales y remotas.
+- `git rebase`: Reescribe el historial de una rama, moviendo los commits de una rama sobre otra.
 
 ## Conflictos en Git
 
-### Conflictos comunes
+Un conflicto ocurre cuando Git no puede fusionar los cambios automáticamente. Hay diferentes tipos de conflictos y soluciones:
 
-1. **Al hacer merge**
-   - Dos ramas modifican las mismas líneas.
-   - Git marca el conflicto para resolver manualmente.
+### Conflictos al fusionar (`git merge`)
+- Ocurren cuando dos ramas editan las mismas líneas de un archivo.
+- Solución: Git te permite elegir cuál versión conservar o fusionarlas manualmente.
 
-2. **Al hacer rebase**
-   - Se intenta reescribir commits que ya han cambiado.
-   - Resolver como en merge.
+### Conflictos al rebase (`git rebase`)
+- Ocurren cuando reescribes el historial de una rama compartida y entra en conflicto con los cambios de otra rama.
+- Solución: Git te permite decidir cómo resolver el conflicto y fusionar los cambios.
 
-3. **Al hacer pull**
-   - Se traen cambios remotos que colisionan con cambios locales no confirmados.
-   - Resolver como en merge.
+### Conflictos al hacer pull
+- Ocurren cuando no has hecho `push` antes de hacer un `pull` y Git intenta fusionar los cambios.
+- Solución: Resolver el conflicto de manera similar a como lo haces con merge.
 
-4. **Al cambiar de rama**
-   - Hay cambios no confirmados.
-   - Solución: hacer commit o stash antes de cambiar.
+### Conflictos al cambiar de rama
+- Ocurren cuando hay cambios no confirmados al intentar cambiar de rama.
+- Solución: Hacer un commit o usar `git stash` antes de cambiar de rama.
 
-5. **Al aplicar un stash**
+### Conflictos al aplicar un stash
+- Ocurren cuando los cambios guardados en un stash entran en conflicto con cambios posteriores.
+- Solución: Elegir entre los cambios del stash y los actuales o fusionarlos.
 
-```bash
-git stash pop
-```
+## Stash
 
-- Si hay conflicto, el stash no se elimina.
-- Ver contenido con:
-
-```bash
-git stash show -p
-```
-
-- Aplicar sin borrar:
-
-```bash
-git stash apply
-```
-
-- Eliminar stash:
-
-```bash
-git stash drop stash@{0}
-git stash clear
-```
-
-## Buenas prácticas
-
-- Hacer `pull` antes de comenzar a trabajar.
-- Dividir el trabajo en ramas pequeñas y específicas.
-- Hacer `stash` o `commit` antes de cambiar de rama.
-- Evitar `rebase` en ramas compartidas si no se domina.
+- `git stash`: Guarda los cambios no confirmados temporalmente.
+- `git stash pop`: Aplica los cambios del stash y lo elimina si no hay conflicto.
+- `git stash show -p`: Muestra los cambios en el stash.
+- `git stash drop stash@{0}`: Elimina un stash específico.
+- `git stash clear`: Elimina todos los stashes.
 
 ----------------------------------------------------------------------------------------------------------
 
