@@ -1,4 +1,22 @@
 # Introducción a Git
+
+Este repositorio presenta los fundamentos del sistema de control de versiones **Git**, herramienta ampliamente utilizada en el desarrollo de software para gestionar el historial de cambios de un proyecto.
+
+Git permite trabajar de forma distribuida, registrar cada modificación al código fuente, mantener múltiples versiones activas mediante ramas, y facilitar la colaboración entre desarrolladores sin riesgo de pérdida o sobrescritura de información.
+
+Se abordan conceptos esenciales como:
+
+- Inicialización de repositorios (`git init`)
+- Seguimiento de archivos y confirmación de cambios (`git add`, `git commit`)
+- Manejo de ramas (`git branch`, `git checkout`, `git merge`)
+- Sincronización con repositorios remotos (`git push`, `git pull`, `git clone`)
+- Comparación entre modelos de control de versiones centralizados y distribuidos
+
+Este entorno sirve como base práctica para aplicar los principios de control de versiones, comprender el flujo de trabajo en Git y prepararse para su integración con plataformas como GitHub.
+
+----------------------------------------------------------------------------------------------------------
+
+# Introducción a Git
 ## Control de versiones
 
 Git es un sistema distribuido que registra todos los cambios realizados en el código fuente de un proyecto. Permite mantener un historial detallado, saber quién hizo qué y cuándo, y facilita el trabajo colaborativo sin sobrescribir el trabajo de otros.
