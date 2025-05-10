@@ -1,52 +1,33 @@
-# Introducción a Git: Control de Versiones
+# Introducción a Git
+## Control de versiones
 
-Git es un sistema de control de versiones distribuido diseñado para registrar y gestionar los cambios realizados en el código fuente de un proyecto. Permite mantener un historial detallado de las modificaciones, identificando quién hizo qué cambios y cuándo, lo que mejora significativamente la colaboración en equipos de desarrollo.
+Git es un sistema distribuido que registra todos los cambios realizados en el código fuente de un proyecto. Permite mantener un historial detallado, saber quién hizo qué y cuándo, y facilita el trabajo colaborativo sin sobrescribir el trabajo de otros.
 
-## ¿Por qué usar Git?
+### Ventajas principales
 
-- 🕓 Historial completo de cambios.
-- 🔐 Seguridad y control sobre el código.
-- 🤝 Trabajo colaborativo sin conflictos.
-- ⚡ Alto rendimiento y flexibilidad.
+- Guarda versiones del código (puntos de control).
+- Permite comparar y recuperar versiones anteriores.
+- Facilita trabajar con ramas independientes.
+- No requiere internet para trabajar con el historial.
+- Permite colaborar de forma eficiente, incluso sin conexión.
 
-## Breve Historia
+### Breve historia
 
-- **1990**: Surge CVS (actualmente obsoleto).
-- **2005**: Linus Torvalds crea Git como alternativa libre a BitKeeper.
-- **2008**: Nace GitHub como plataforma para alojar repositorios remotos.
-- **2024**: Git se consolida como el estándar con integración de IA y herramientas como GitHub Spark.
+- En los años 90 nace CVS (ya obsoleto).
+- En 2005, Linus Torvalds crea Git.
+- En 2008 aparece GitHub para alojar proyectos Git.
+- En 2018, Microsoft compra GitHub.
+- En 2024, Git integra IA y domina el mercado.
 
-## Conceptos Clave
+### Repositorio
 
-- **Repositorio**: Base de datos que almacena versiones del proyecto (puede ser local o remoto).
-- **Estados en Git**:
-  - `Modified`: Archivo cambiado pero no preparado.
-  - `Staged`: Cambios listos para confirmar.
-  - `Committed`: Cambios guardados en el historial.
-- **Commit**: Registro puntual de cambios.
-- **Branch (rama)**: Línea de desarrollo independiente.
-- **Merge**: Integración de una rama a otra.
+Un repositorio es donde se almacenan los cambios del proyecto. Puede ser local (en tu equipo) o remoto (en plataformas como GitHub o GitLab). Git permite trabajar localmente y luego sincronizar con el repositorio remoto.
 
-## Git vs. GitHub
-
-- **Git**: Herramienta local de control de versiones.
-- **GitHub**: Plataforma en la nube para gestionar repositorios remotos.
-  - Alternativas: GitLab, Bitbucket.
-
-## Flujo de Trabajo Básico
+### Crear un repositorio local
 
 ```bash
-# Clonar un repositorio
-git clone <url-del-repositorio>
+git init nombre-del-proyecto
+cd nombre-del-proyecto
 
-# Crear y cambiar de rama
-git branch nueva-rama
-git checkout nueva-rama
-
-# Agregar y confirmar cambios
-git add .
-git commit -m "Mensaje descriptivo"
-
-# Subir y descargar cambios
-git push
-git pull
+# Si deseas usar otro nombre para la rama principal:
+git init nombre-del-proyecto --initial-branch=main
