@@ -434,3 +434,42 @@ Un **Pull Request** es una solicitud para que los cambios hechos en una rama sea
 - Sé concreto y claro, entendiendo bien el contexto del cambio.
 - El código debe ser eficiente y cumplir su cometido, no importa si no está perfecto visualmente.
 
+----------------------------------------------------------------------------------------------------------
+
+# Git Flow
+
+## ¿Qué es GitFlow?
+
+GitFlow es una estrategia de ramificación para Git propuesta por Vincent Driessen. Está diseñada para gestionar el desarrollo de software de manera ordenada, especialmente útil en proyectos con ciclos de versiones definidos.
+
+## Ramas principales
+
+- **main**: Contiene el código en producción. Cada commit en esta rama representa una versión estable.
+- **develop**: Contiene el código en desarrollo, donde se integran nuevas funcionalidades antes de pasar a producción.
+
+## Ramas de soporte
+
+- **feature/**: Usadas para desarrollar nuevas funcionalidades. Se crean desde `develop` y se fusionan de nuevo en `develop`. Ejemplo: `feature/login`, `feature/pago-online`.
+- **release/**: Preparan una nueva versión de producción. Se crean desde `develop`, y una vez lista, se fusionan en `main` y `develop`. Ejemplo: `release/v1.0.0`.
+- **hotfix/**: Se usan para corregir errores críticos directamente en producción. Se crean desde `main` y se fusionan en `main` y `develop`. Ejemplo: `hotfix/error-login`.
+
+## Flujo básico de trabajo
+
+1. Clona el repositorio y cámbiate a la rama `develop`.
+2. Crea una rama `feature/` para tu funcionalidad.
+3. Cuando termines, haz `merge` a `develop`.
+4. Al cerrar un ciclo de desarrollo, crea una rama `release/`.
+5. Realiza pruebas y ajustes finales en `release/`.
+6. Cuando esté lista, haz `merge` a `main` y etiqueta con la versión.
+7. También haz `merge` de `release/` a `develop`.
+8. Si hay errores en producción, crea una rama `hotfix/`.
+
+## Ventajas de GitFlow
+
+- Organización clara del proceso de desarrollo.
+- Facilita el trabajo en equipo.
+- Ideal para proyectos con entregas y versiones definidas.
+
+## Cuándo evitar GitFlow
+
+En proyectos muy pequeños o de desarrollo continuo (como en DevOps), puede ser excesivo. Alternativas más simples incluyen **GitHub Flow** o **Trunk Based Development**.
