@@ -63,3 +63,115 @@ Git maneja tres estados principales para los archivos:
 **Resumen del flujo:**
 ```bash
 WORKING DIR → git add → STAGING AREA → git commit → REPO LOCAL
+
+----------------------------------------------------------------------------------------------------------
+
+# Git - Ramas y Conflictos
+
+## Ramas en Git
+
+### ¿Qué es una rama?
+Una rama es una línea de desarrollo independiente. Permite trabajar funcionalidades o arreglos sin afectar el código principal (`main` o `master`).
+
+### Crear ramas
+
+**Con `checkout` (más antiguo y versátil):**
+
+```bash
+git checkout -b nueva-rama  # Crea y cambia a la nueva rama
+```
+
+**Con `switch` (más moderno y enfocado en ramas):**
+
+```bash
+git switch -c nueva-rama  # Crea y cambia a la nueva rama
+```
+
+### Cambiar de rama
+
+```bash
+git checkout nombre-rama
+git switch nombre-rama
+```
+
+### Fusionar ramas
+
+```bash
+git checkout main
+git merge nueva-rama
+```
+
+Opciones útiles:
+- `--edit`: permite editar el mensaje del merge.
+- `--no-commit`: no hace commit automático; se revisa antes de confirmar.
+
+### Eliminar ramas
+
+```bash
+git branch -d rama       # Borra una rama fusionada
+git branch -D rama       # Borra una rama no fusionada (forzado)
+```
+
+### Otros comandos útiles
+
+- `git branch`: muestra ramas locales.
+- `git branch -a`: muestra ramas locales y remotas.
+- `git rebase`: reescribe el historial de una rama sobre otra (más limpio que merge).
+
+Diferencia `merge` vs `rebase`:
+- `merge` conserva el historial con bifurcaciones.
+- `rebase` crea un historial lineal, sin commits de merge.
+
+## Conflictos en Git
+
+### Conflictos comunes
+
+1. **Al hacer merge**
+   - Dos ramas modifican las mismas líneas.
+   - Git marca el conflicto para resolver manualmente.
+
+2. **Al hacer rebase**
+   - Se intenta reescribir commits que ya han cambiado.
+   - Resolver como en merge.
+
+3. **Al hacer pull**
+   - Se traen cambios remotos que colisionan con cambios locales no confirmados.
+   - Resolver como en merge.
+
+4. **Al cambiar de rama**
+   - Hay cambios no confirmados.
+   - Solución: hacer commit o stash antes de cambiar.
+
+5. **Al aplicar un stash**
+
+```bash
+git stash pop
+```
+
+- Si hay conflicto, el stash no se elimina.
+- Ver contenido con:
+
+```bash
+git stash show -p
+```
+
+- Aplicar sin borrar:
+
+```bash
+git stash apply
+```
+
+- Eliminar stash:
+
+```bash
+git stash drop stash@{0}
+git stash clear
+```
+
+## Buenas prácticas
+
+- Hacer `pull` antes de comenzar a trabajar.
+- Dividir el trabajo en ramas pequeñas y específicas.
+- Hacer `stash` o `commit` antes de cambiar de rama.
+- Evitar `rebase` en ramas compartidas si no se domina.
+
