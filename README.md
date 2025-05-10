@@ -49,3 +49,17 @@ cd nombre-del-proyecto
 
 # Si deseas usar otro nombre para la rama principal:
 git init nombre-del-proyecto --initial-branch=main
+
+----------------------------------------------------------------------------------------------------------
+
+## Estados de Git
+
+Git maneja tres estados principales para los archivos:
+
+- **Modified**: El archivo fue cambiado pero aún no se ha preparado para confirmación. Si es nuevo y no está siendo rastreado, se considera "untracked".
+- **Staged**: El archivo ha sido marcado para ser incluido en el próximo commit (usando `git add`).
+- **Committed**: Los cambios han sido guardados en el historial local con `git commit`.
+
+**Resumen del flujo:**
+```bash
+WORKING DIR → git add → STAGING AREA → git commit → REPO LOCAL
