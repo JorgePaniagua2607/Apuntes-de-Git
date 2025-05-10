@@ -49,6 +49,7 @@ cd nombre-del-proyecto
 
 # Si deseas usar otro nombre para la rama principal:
 git init nombre-del-proyecto --initial-branch=main
+```
 
 ----------------------------------------------------------------------------------------------------------
 
@@ -63,6 +64,7 @@ Git maneja tres estados principales para los archivos:
 **Resumen del flujo:**
 ```bash
 WORKING DIR → git add → STAGING AREA → git commit → REPO LOCAL
+```
 
 ----------------------------------------------------------------------------------------------------------
 
